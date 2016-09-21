@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: R0y866uXZD5ycPe7cUAkuLi+KZUHYwStT+H/ra+9WE0KcMGNNQAHLaKC4Hzw05aRiBS9LeDWfubmU3Id8dUbU4xba4lPNrLhbys7B9QDJd+FfZ1yJtmwoccA0SoM2cALaOvmZfbFgtFNxSgbID7Rsp07I1IVkae1Blv54s4a4nURDBrOjnOFauquF4D+eXyXN0DfSk0vrIxJRQm3yRVWNDrWh0fdreRNa+kDFhBCpWAP0TJo0pjMSqgiMedvqPubYGu8kW/Wvb+DIGU+QEWmIpeuw+CDmovbhAKfiDoTxMGUfJ9L/8ORfZCcY2kSNWontbH/ObVfy0XY+sDe38g4ugG5n+kJEPb4W8lm929M2yySIpTwamtxl1yv5XbmGpo+X+mx+IFA7AnMfZKMoROeqajQYwCxPzSe/rDrqFDeQc9EC1gouP350a7/7WmM6kvbpjbpDIYbSmkb2Gk4d93bwrKXS4t2IohDLLTs2ekVh7RshekFeyr4yDeoGnSj+AZA6pR0gq5cOlj57Py8GDBa9VolvN4mLS+7wE5uVLtpMzoaPXPr7ChYfqdMi0coNekTIqWFRIEjU5tbIWR9IDkg6m+OjXnekohtMNqbZ30qJivRL7KL1eS+lvRT2rHp55F8Di8gs/FoAS+FSLCKGjoMPLiWW3cxEHAiUBA22kR4eT4=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/Young-Folks-History-of-England_4769
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy
