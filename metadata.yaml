@@ -1,5 +1,5 @@
 _repo: Young-Folks-History-of-England_4769
-_version: 0.2.0
+_version: 0.2.1
 covers:
 - cover_type: generated
   image_path: cover.png
@@ -31,5 +31,6 @@ rights_url: http://creativecommons.org/about/pdm
 subjects:
 - !lcsh 'Great Britain -- History -- Juvenile literature'
 - !lcc 'DA'
+- GITenberg
 title: Young Folks' History of England
 url: http://www.gutenberg.org/ebooks/4769
